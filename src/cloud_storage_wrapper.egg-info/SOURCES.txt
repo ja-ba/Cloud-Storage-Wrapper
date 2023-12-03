@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+src/cloud_storage_wrapper.egg-info/PKG-INFO
+src/cloud_storage_wrapper.egg-info/SOURCES.txt
+src/cloud_storage_wrapper.egg-info/dependency_links.txt
+src/cloud_storage_wrapper.egg-info/requires.txt
+src/cloud_storage_wrapper.egg-info/top_level.txt
+src/cloud_storage_wrapper/oci_access/__init__.py
+src/cloud_storage_wrapper/oci_access/config.py
+src/cloud_storage_wrapper/oci_access/files.py
+src/cloud_storage_wrapper/oci_access/pandas.py
+test/test_oci.py

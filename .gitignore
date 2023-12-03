@@ -1,6 +1,5 @@
 .venv/
 .tox/
-*.egg-info
 *.pem
 *.pyc
 */example_key.txt
