@@ -4,6 +4,8 @@ from pathlib import Path
 import pandas as pd
 from cloud_storage_wrapper.oci_access.config import OCI_Connection
 
+# import polars as pl
+
 
 os.environ["SAMPLE_KEY"] = Path("test/example_key.txt").read_text()
 my_key_string = Path("test/example_key.txt").read_text()

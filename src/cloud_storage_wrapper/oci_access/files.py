@@ -81,30 +81,3 @@ class FilesOCI(OCI_Connection):
         return self.object_storage.list_objects(
             self.namespace, self.bucket_name, prefix=prefix
         ).data.objects
-
-
-# import oci
-
-# config = {
-#     "user": "<your-user-ocid>",
-#     "key_file": "<path-to-private-key.pem>",
-#     "fingerprint": "<your-key-fingerprint>",
-#     "tenancy": "<your-tenancy-ocid>",
-#     "region": "<your-region>"
-# }
-
-# # Create an Object Storage client
-# object_storage_client = oci.object_storage.ObjectStorageClient(config)
-
-# namespace = "<your-namespace>"
-# bucket_name = "<your-bucket-name>"
-# object_name = "<your-object-name>"
-# destination_path = "<path-to-download-destination>"
-
-# Download the object to disk
-# with open(destination_path, "wb") as file:
-#     object_data = object_storage_client.download_object(
-#         namespace, bucket_name, object_name
-#     )
-#     for chunk in object_data.data.raw.stream(1024 * 1024, decode_content=False):
-#         file.write(chunk)

@@ -1,4 +1,3 @@
-pandas<2.2,>=2.0
 ocifs<1.3,>=1.2.0
 oci<3.0.0,>=2.0.0
 pyarrow<14.0.0,>=13.0.0
@@ -10,3 +9,5 @@ pytest>=7.0
 pytest-cov[all]
 seaborn>=0.11.1
 ipykernel
+pandas~=2.0
+psutil~=5.9

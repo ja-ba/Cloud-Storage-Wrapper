@@ -34,6 +34,4 @@ tox | tox -e ruff, typecheck, format, build
 python310 -m pytest -s --cov
 
 
-# Symlinkgs in windows for
-# Navigate to folder with python.exe
-# mklink python3.X.exe python.exe
+git push origin --tags
