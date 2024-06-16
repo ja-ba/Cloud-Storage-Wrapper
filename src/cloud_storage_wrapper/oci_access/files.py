@@ -20,7 +20,7 @@ class FilesOCI(OCI_Connection):
         if decode:
             return self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
-            ).data.content.decode()
+            ).data.content.decode()  # type: ignore
         else:
             return self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
@@ -37,7 +37,7 @@ class FilesOCI(OCI_Connection):
             object_data = self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
             )
-            for chunk in object_data.data.raw.stream(1024 * 1024, decode_content=False):
+            for chunk in object_data.data.raw.stream(1024 * 1024, decode_content=False):  # type: ignore
                 file.write(chunk)
 
     def upload_file(self, file_to_upload: str, file_name: str) -> None:
@@ -80,4 +80,4 @@ class FilesOCI(OCI_Connection):
         """
         return self.object_storage.list_objects(
             self.namespace, self.bucket_name, prefix=prefix
-        ).data.objects
+        ).data.objects  # type: ignore

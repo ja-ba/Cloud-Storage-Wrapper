@@ -3,6 +3,8 @@ from pathlib import Path
 
 import oci
 from ocifs import OCIFileSystem
+from pydantic import BaseModel
+from pydantic import Field
 
 
 class OCI_Connection:
@@ -76,13 +78,8 @@ class OCI_Connection:
             "region": region,
         }
         self.object_storage = oci.object_storage.ObjectStorageClient(self.config)
-        self.namespace = self.object_storage.get_namespace().data
+        self.namespace = self.object_storage.get_namespace().data  # type: ignore
         self.fs = OCIFileSystem(config=self.config, profile="DEFAULT")
-
-        # Set bucket_name and namespace as environment vars
-        # os.environ['BUCKET_NAME'] = bucket_name
-        # os.environ['NAMESPACE'] = namespace
-        # os.environ['COMPARTMENT_ID'] = compartment_id
 
     def retrieve_file_content(self, file_name: str, decode: bool):
         """Method to retrieve file content from a file in OCI cloud storage
@@ -97,7 +94,7 @@ class OCI_Connection:
         if decode:
             return self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
-            ).data.content.decode()
+            ).data.content.decode()  # type: ignore
         else:
             return self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
@@ -114,7 +111,7 @@ class OCI_Connection:
             object_data = self.object_storage.get_object(
                 self.namespace, self.bucket_name, file_name
             )
-            for chunk in object_data.data.raw.stream(1024 * 1024, decode_content=False):
+            for chunk in object_data.data.raw.stream(1024 * 1024, decode_content=False):  # type: ignore
                 file.write(chunk)
 
     def upload_file(self, file_to_upload: str, file_name: str) -> None:
@@ -157,4 +154,35 @@ class OCI_Connection:
         """
         return self.object_storage.list_objects(
             self.namespace, self.bucket_name, prefix=prefix
-        ).data.objects
+        ).data.objects  # type: ignore
+
+
+class OCI_Config_Base(BaseModel):
+    user: str
+    fingerprint: str
+    tenancy: str
+    region: str
+    bucket_name: str
+    compartment_id: str
+    key_file: str = Field("")
+    direct_key: str = Field("")
+    env_key: str = Field("")
+
+
+def create_OCI_Connection_from_dict(configDict: dict) -> OCI_Connection:
+    """A function creating an OCI_Connection object based on a config dict
+
+    Args:
+        configDict (dict): a config dict containing the
+
+    Returns:
+        OCI_Connection: Returns the OCI Connection object
+    """
+    if "oci_config" not in configDict:
+        raise ValueError("passed dictionary does not contain the key 'oci_config'")
+
+    # Validate against OCI_Config_Base
+    configDict_Base = OCI_Config_Base(**configDict["oci_config"]).model_dump()
+
+    # Return the created config
+    return OCI_Connection(**configDict_Base)

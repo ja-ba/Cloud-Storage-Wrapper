@@ -2,10 +2,8 @@ import os
 from pathlib import Path
 
 import pandas as pd
+import pytest
 from cloud_storage_wrapper.oci_access.config import OCI_Connection
-
-# import polars as pl
-
 
 os.environ["SAMPLE_KEY"] = Path("test/example_key.txt").read_text()
 my_key_string = Path("test/example_key.txt").read_text()
@@ -55,7 +53,131 @@ class Test_config:
 test_file_name = "my_tests/test_df"
 
 
-class TestOCI_Pandas:
+class Test_PandasOCI:
+    def test_pandas_upload_csv(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "csv"
+
+        myPandasOCI.write_df(
+            df=temp_df, path=f"{test_file_name}.{format}", df_format=format
+        )
+
+    def test_pandas_download_csv(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "csv"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+        assert temp_df.equals(temp_df_download)
+
+    def test_pandas_download_csv_columns(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        cols = list(temp_df.columns)[:3]
+        temp_df = temp_df[cols]
+        myPandasOCI = create_PandasOCI
+        format = "csv"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format, columns=cols
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+
+        assert temp_df.equals(temp_df_download)
+
+    def test_pandas_upload_parquet(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "parquet"
+
+        myPandasOCI.write_df(
+            df=temp_df, path=f"{test_file_name}.{format}", df_format=format
+        )
+
+    def test_pandas_download_parquet(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "parquet"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+
+        assert temp_df.equals(temp_df_download)
+
+    def test_pandas_download_parquet_columns(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        cols = list(temp_df.columns)[:3]
+        temp_df = temp_df[cols]
+        myPandasOCI = create_PandasOCI
+        format = "parquet"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format, columns=cols
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+
+        assert temp_df[cols].equals(temp_df_download)
+
+    def test_pandas_upload_feather(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "ftr"
+
+        myPandasOCI.write_df(
+            df=temp_df, path=f"{test_file_name}.{format}", df_format=format
+        )
+
+    def test_pandas_download_feather(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        myPandasOCI = create_PandasOCI
+        format = "ftr"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+
+        assert temp_df.equals(temp_df_download)
+
+    def test_pandas_download_feather_columns(self, load_sampled_iris, create_PandasOCI):
+        temp_df = load_sampled_iris
+        cols = list(temp_df.columns)[:3]
+        temp_df = temp_df[cols]
+        myPandasOCI = create_PandasOCI
+        format = "ftr"
+
+        temp_df_download = myPandasOCI.retrieve_df(
+            path=f"{test_file_name}.{format}", df_format=format, columns=cols
+        )
+        temp_df = temp_df.astype(temp_df_download.dtypes)
+
+        assert temp_df[cols].equals(temp_df_download)
+
+    def test_wrong_formats(self, create_PandasOCI, load_sampled_iris):
+        with pytest.raises(ValueError):
+            format = "foo"
+            create_PandasOCI.retrieve_df(
+                path=f"{test_file_name}.{format}", df_format=format
+            )
+        with pytest.raises(ValueError):
+            create_PandasOCI.write_df(
+                df=load_sampled_iris, path=f"{test_file_name}.{format}", df_format="foo"
+            )
+
+    def test_empty_df_error(self, create_PandasOCI):
+        format = "csv"
+        with pytest.raises(ValueError):
+            create_PandasOCI.write_df(
+                df=pd.DataFrame(), path=f"{test_file_name}.{format}", df_format=format
+            )
+
+
+class TestOCI_Pandas_manual:
     def test_pandas_upload_csv(self, load_sampled_iris, create_OCI_config):
         temp_df = load_sampled_iris
         test_config = create_OCI_config

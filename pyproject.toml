@@ -1,13 +1,13 @@
 [project]
 name = "cloud-storage-wrapper"
-version = "0.0.2"
+version = "0.0.3"
 license = {file = "LICENSE"}
 authors = [
   {email = "jakobs.dataprojects@gmail.com"},
   {name = "Jakob Baier"}
 ]
 description = "A package for easily accessing Blob storage in different cloud environment"
-dependencies = ["ocifs>=1.2.0,<1.3", "oci>=2.0.0,<3.0.0", "pyarrow>=13.0.0,<14.0.0", "requests"]
+dependencies = ["ocifs>=1.2.0,<1.3", "oci>=2.0.0,<3.0.0", "pyarrow>=13.0.0,<14.0.0", "requests", "pandas>=2.0, <2.2", "pydantic~=2.6", ]
 
 [project.urls]
 homepage = "https://example.com"
@@ -29,7 +29,6 @@ test = [
   "pytest-cov[all]",
   "seaborn>=0.11.1",
   "ipykernel",
-  "pandas~=2.0",
   "psutil~=5.9"
 ]
 
@@ -79,7 +78,7 @@ commands =
   tox -e typecheck
   tox -e ruff
   tox -e format
-  # pyproject-build
+  pyproject-build
 
 """
 

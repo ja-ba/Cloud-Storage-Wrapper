@@ -1,0 +1,8 @@
+{
+    "CodeGPT.apiKey": "OpenAI",
+    "python.testing.pytestArgs": [
+        "test"
+    ],
+
+
+}

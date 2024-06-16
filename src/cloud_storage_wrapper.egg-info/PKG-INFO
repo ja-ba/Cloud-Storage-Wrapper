@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: cloud-storage-wrapper
-Version: 0.0.2
+Version: 0.0.3
 Summary: A package for easily accessing Blob storage in different cloud environment
 Author: Jakob Baier
 Author-email: jakobs.dataprojects@gmail.com
@@ -35,11 +35,12 @@ Requires-Dist: ocifs<1.3,>=1.2.0
 Requires-Dist: oci<3.0.0,>=2.0.0
 Requires-Dist: pyarrow<14.0.0,>=13.0.0
 Requires-Dist: requests
+Requires-Dist: pandas<2.2,>=2.0
+Requires-Dist: pydantic~=2.6
 Provides-Extra: test
 Requires-Dist: tox; extra == "test"
 Requires-Dist: pytest>=7.0; extra == "test"
 Requires-Dist: pytest-cov[all]; extra == "test"
 Requires-Dist: seaborn>=0.11.1; extra == "test"
 Requires-Dist: ipykernel; extra == "test"
-Requires-Dist: pandas~=2.0; extra == "test"
 Requires-Dist: psutil~=5.9; extra == "test"
